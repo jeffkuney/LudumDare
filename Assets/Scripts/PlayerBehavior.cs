@@ -77,10 +77,6 @@ public class PlayerBehavior : MonoBehaviour
         _lastFired = Time.fixedTime;
 
         Vector3 mousePoint = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Debug.Log("player");
-        Debug.Log(transform.position);
-        Debug.Log("mouse");
-        Debug.Log(mousePoint);
         mousePoint.z = 0.0f;
         Vector3 direction = mousePoint - transform.position;
         direction = direction.normalized;
