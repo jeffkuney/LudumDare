@@ -6,6 +6,7 @@ public class BasicBullet : MonoBehaviour, IProjectileBehavior
 {
     public float ShotVelocity = 1.0f;
     public float SecondsToLive = 5;
+    public Vector3 Direction = new Vector3(1, 0);
 
     private float _instantiated_time; 
     // Start is called before the first frame update
@@ -22,8 +23,7 @@ public class BasicBullet : MonoBehaviour, IProjectileBehavior
             Destroy(this.gameObject);
         }
 
-        Vector3 direction = new Vector3(1, 0);
-        var target = ShotVelocity * direction;
+        var target = ShotVelocity * Direction;
 
         transform.Translate(target * Time.deltaTime);
         

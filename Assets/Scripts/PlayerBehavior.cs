@@ -9,12 +9,13 @@ public class PlayerBehavior : MonoBehaviour
     public float JumpVelocity = 1.0f;
     public float MaxVelocity = 1.0f;
     public float SpeedLoss = .1f;
-    public GameObject Bullet;
+    public BasicBullet Bullet;
     public int FireRateInMilliseconds = 100;
 
     private Rigidbody2D _rigidBody;
     private Vector2 _velocity = new Vector2();
     private float _lastFired;
+    private Camera _mainCamera;
 
 
 
@@ -26,6 +27,7 @@ public class PlayerBehavior : MonoBehaviour
     private void Awake()
     {
         _lastFired = Time.fixedTime;
+        _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>() as Camera;
     }
 
     // Update is called once per frame
@@ -72,7 +74,18 @@ public class PlayerBehavior : MonoBehaviour
             return;
         }
 
-        _lastFired = Time.fixedTime;   
-        Instantiate(Bullet, this.transform.position, Quaternion.identity);
+        _lastFired = Time.fixedTime;
+
+        Vector3 mousePoint = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Debug.Log("player");
+        Debug.Log(transform.position);
+        Debug.Log("mouse");
+        Debug.Log(mousePoint);
+        mousePoint.z = 0.0f;
+        Vector3 direction = mousePoint - transform.position;
+        direction = direction.normalized;
+        
+        Instantiate(Bullet, transform.position, Quaternion.identity);
+        Bullet.Direction = direction;
     }
 }
