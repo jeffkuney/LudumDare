@@ -9,19 +9,23 @@ public class PlayerBehavior : MonoBehaviour
     public float JumpVelocity = 1.0f;
     public float MaxVelocity = 1.0f;
     public float SpeedLoss = .1f;
+    public GameObject Bullet;
+    public int FireRateInMilliseconds = 100;
 
     private Rigidbody2D _rigidBody;
     private Vector2 _velocity = new Vector2();
+    private float _lastFired;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     private void Awake()
     {
+        _lastFired = Time.fixedTime;
     }
 
     // Update is called once per frame
@@ -39,6 +43,11 @@ public class PlayerBehavior : MonoBehaviour
     {
         var horizontal = Input.GetAxis("Horizontal");
         bool jump = Input.GetButton("Jump");
+        bool fire = Input.GetButton("Fire1");
+        if (fire)
+        {
+            Fire();
+        }
 
         _velocity += new Vector2(horizontal, 0.0f);
         _velocity.x = Mathf.Lerp(_velocity.x, 0, SpeedLoss);
@@ -54,5 +63,16 @@ public class PlayerBehavior : MonoBehaviour
         _velocity.y = Mathf.Clamp(_velocity.y, -MaxVelocity, MaxVelocity);
 
         transform.Translate(_velocity * MovementSpeed);
+    }
+
+    private void Fire()
+    {
+        if (Time.fixedTime < _lastFired + FireRateInMilliseconds / 1000f)
+        {
+            return;
+        }
+
+        _lastFired = Time.fixedTime;   
+        Instantiate(Bullet, this.transform.position, Quaternion.identity);
     }
 }
